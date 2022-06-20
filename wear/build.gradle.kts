@@ -1,13 +1,15 @@
 plugins {
    id("com.android.application")
+   id("dagger.hilt.android.plugin")
    kotlin("android")
+   kotlin("kapt")
 }
 
 android {
    compileSdk = 31
 
    defaultConfig {
-      applicationId = "com.matejdro.runpeewear.wear"
+      applicationId = "com.matejdro.runpeewear"
       minSdk = 26
       targetSdk = 31
 
@@ -40,9 +42,13 @@ dependencies {
    implementation(libs.androidx.activity.compose)
    implementation(libs.androidx.compose.compiler)
    implementation(libs.androidx.compose.wear.foundation)
+   implementation(libs.androidx.wear)
    implementation(libs.androidx.compose.wear.material)
    implementation(libs.androidx.compose.wear.navigation)
-   implementation(libs.androidx.wear)
+   implementation(libs.dagger.hilt.runtime)
+   implementation(libs.kotlin.coroutines.playServices)
    implementation(libs.logcat)
    implementation(libs.playServices.wearable)
+
+   kapt(libs.dagger.hilt.compiler)
 }
