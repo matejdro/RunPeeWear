@@ -10,6 +10,7 @@ dagger = "2.38.1"
 libsu = "5.0.2"
 logcat = "0.1"
 kotlin = "1.5.31"
+kotlin-coroutines = "1.6.2"
 playServices-wearable = "17.1.0"
 wire = "3.7.0"
 
@@ -33,6 +34,7 @@ libsu = { module = "com.github.topjohnwu.libsu:core", version.ref = "libsu" }
 libsu-io = { module = "com.github.topjohnwu.libsu:io", version.ref = "libsu" }
 logcat = { module = "com.squareup.logcat:logcat", version.ref = "logcat" }
 kotlin-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-coroutines-playServices = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlin.coroutines" }
 playServices-wearable = { module = "com.google.android.gms:play-services-wearable", version.ref = "playServices.wearable" }
 wire-runtime = { module = "com.squareup.wire:wire-runtime", version.ref = "wire" }
 wire-pluginGradle = { module = "com.squareup.wire:wire-gradle-plugin", version.ref = "wire" }

@@ -2,6 +2,9 @@ package com.matejdro.runpeewear
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.wearable.DataClient
+import com.google.android.gms.wearable.PutDataRequest
+import com.matejdro.runpeewear.common.CommPaths
 import com.matejdro.runpeewear.data.MovieDatabase
 import com.matejdro.runpeewear.data.PeetimesDatabase
 import com.matejdro.runpeewear.model.Movie
@@ -13,12 +16,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
    private val movieDatabase: MovieDatabase,
-   private val peetimesDatabase: PeetimesDatabase
+   private val peetimesDatabase: PeetimesDatabase,
+   private val dataClient: DataClient
 ) : ViewModel() {
    private val _movies = MutableStateFlow<List<Movie>>(emptyList())
    val movies: StateFlow<List<Movie>>
@@ -58,7 +63,11 @@ class MainViewModel @Inject constructor(
          }
          val peeTimes = PeeTimes(movie.title, movie.timerCue, peetimeList)
 
-         println("Peetimes: ${peeTimes}")
+         dataClient.putDataItem(
+            PutDataRequest.create(CommPaths.DATA_PEE_TIMES)
+               .setData(peeTimes.encode())
+         ).await()
+
          _selectionResult.emit(MovieSelectionResult.Success)
       } catch (e: Exception) {
          _selectionResult.tryEmit(MovieSelectionResult.Failure(e))
