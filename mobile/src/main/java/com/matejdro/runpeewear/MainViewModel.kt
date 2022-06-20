@@ -36,6 +36,13 @@ class MainViewModel @Inject constructor(
       }
    }
 
+   fun reload() {
+      viewModelScope.launch {
+         movieDatabase.reload()
+         peetimesDatabase.reload()
+      }
+   }
+
    fun search(keyword: String) {
       loadingJob?.cancel()
       loadingJob = viewModelScope.launch {

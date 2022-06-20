@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.matejdro.runpeewear.ui.MobileAppTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -60,6 +59,12 @@ class MainActivity : ComponentActivity() {
             }
          }
       }
+   }
+
+   override fun onStart() {
+      super.onStart()
+
+      viewModel.reload()
    }
 
    @Composable
