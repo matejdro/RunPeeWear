@@ -7,5 +7,6 @@ buildscript {
       classpath(libs.androidPluginGradle)
       classpath(libs.kotlin.pluginGradle)
       classpath(libs.wire.pluginGradle)
+      classpath(libs.dagger.hilt.plugin)
    }
 }
