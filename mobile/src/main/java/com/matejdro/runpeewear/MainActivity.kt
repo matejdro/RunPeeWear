@@ -1,6 +1,7 @@
 package com.matejdro.runpeewear
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -25,8 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import com.matejdro.runpeewear.ui.MobileAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -34,6 +38,20 @@ class MainActivity : ComponentActivity() {
 
    override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
+
+      lifecycleScope.launch {
+         viewModel.selectionResult.collect {
+            val text = when (it) {
+               is MovieSelectionResult.Failure -> {
+                  it.e.printStackTrace()
+                  "Failed to transfer peetimes to the watch: ${it.e.message}"
+               }
+               MovieSelectionResult.Success -> "Transferred peetimes to the watch"
+            }
+
+            Toast.makeText(this@MainActivity, text, Toast.LENGTH_LONG).show()
+         }
+      }
 
       setContent {
          MobileAppTheme {
@@ -85,7 +103,9 @@ class MainActivity : ComponentActivity() {
             Text(it.title,
                Modifier
                   .fillMaxWidth()
-                  .clickable { }
+                  .clickable {
+                     viewModel.onMovieSelected(it)
+                  }
                   .padding(32.dp), fontSize = 18.sp)
             Divider()
          }

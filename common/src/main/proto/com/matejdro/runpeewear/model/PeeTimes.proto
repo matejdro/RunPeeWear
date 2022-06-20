@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "com.matejdro.runpeewear.model";
+
+message PeeTimes {
+  string movieName = 1;
+  string timerCue = 2;
+  repeated PeeTime times = 3;
+}
+
+message PeeTime {
+  int32 cueTimeSecondsAfterMovieStart = 1;
+  string cue = 2;
+  string synopsis = 3;
+  bool isRecommended = 4;
+}

@@ -26,7 +26,7 @@ class MovieDatabase @Inject constructor(@ApplicationContext context: Context) : 
       buildList {
          database.query(
             /* table = */ "movies",
-            /* columns = */ arrayOf("mKey", "title"),
+            /* columns = */ arrayOf("mKey", "title", "timerCue"),
             /* selection = */ selection,
             /* selectionArgs = */ null,
             /* groupBy = */ null,
@@ -36,8 +36,9 @@ class MovieDatabase @Inject constructor(@ApplicationContext context: Context) : 
             while (cursor.moveToNext()) {
                val id = cursor.getInt(0)
                val title = cursor.getString(1)
+               val timerCue = cursor.getString(2)
 
-               add(Movie(id, title))
+               add(Movie(id, title, timerCue))
             }
          }
       }

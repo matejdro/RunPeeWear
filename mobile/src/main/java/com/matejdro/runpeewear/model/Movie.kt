@@ -1,3 +1,3 @@
 package com.matejdro.runpeewear.model
 
-data class Movie(val id: Int, val title: String)
+data class Movie(val id: Int, val title: String, val timerCue: String)

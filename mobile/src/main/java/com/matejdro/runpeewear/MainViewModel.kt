@@ -3,19 +3,30 @@ package com.matejdro.runpeewear
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.matejdro.runpeewear.data.MovieDatabase
+import com.matejdro.runpeewear.data.PeetimesDatabase
 import com.matejdro.runpeewear.model.Movie
+import com.matejdro.runpeewear.model.PeeTimes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val movieDatabase: MovieDatabase) : ViewModel() {
+class MainViewModel @Inject constructor(
+   private val movieDatabase: MovieDatabase,
+   private val peetimesDatabase: PeetimesDatabase
+) : ViewModel() {
    private val _movies = MutableStateFlow<List<Movie>>(emptyList())
    val movies: StateFlow<List<Movie>>
       get() = _movies
+
+   private val _selectionResult = MutableSharedFlow<MovieSelectionResult>(extraBufferCapacity = 1)
+   val selectionResult: SharedFlow<MovieSelectionResult>
+      get() = _selectionResult
 
    private var loadingJob: Job? = null
 
@@ -31,4 +42,24 @@ class MainViewModel @Inject constructor(private val movieDatabase: MovieDatabase
          _movies.value = movieDatabase.loadMovies(keyword)
       }
    }
+
+   fun onMovieSelected(movie: Movie) = viewModelScope.launch {
+      try {
+         val peetimeList = peetimesDatabase.loadPeetimes(movie.id)
+         if (peetimeList.isEmpty()) {
+            throw IllegalStateException("No peetimes. Open movie in the PeeTime app first.")
+         }
+         val peeTimes = PeeTimes(movie.title, movie.timerCue, peetimeList)
+
+         println("Peetimes: ${peeTimes}")
+         _selectionResult.emit(MovieSelectionResult.Success)
+      } catch (e: Exception) {
+         _selectionResult.tryEmit(MovieSelectionResult.Failure(e))
+      }
+   }
+}
+
+sealed interface MovieSelectionResult {
+   object Success : MovieSelectionResult
+   class Failure(val e: Exception) : MovieSelectionResult
 }
