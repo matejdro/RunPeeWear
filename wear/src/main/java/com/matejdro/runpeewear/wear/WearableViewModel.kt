@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +22,8 @@ class WearableViewModel @Inject constructor(
    val status: StateFlow<PeeTimerStatus>
       get() = _status
 
+   private var currentPeeTimes: PeeTimes? = null
+
    init {
       viewModelScope.launch {
          dataClient.getDataItemFlow(Uri.parse("wear://*${CommPaths.DATA_PEE_TIMES}")).collect {
@@ -29,14 +32,26 @@ class WearableViewModel @Inject constructor(
                return@collect
             }
             val peeTimes = PeeTimes.ADAPTER.decode(it.data)
-            _status.value = PeeTimerStatus.WaitingForStart(peeTimes.movieName)
+            resetTimerState(peeTimes)
          }
       }
+   }
+
+   fun startTimer() {
+      val peeTimes = currentPeeTimes ?: return
+
+      logcat { "Starting timer for ${peeTimes.movieName}" }
+   }
+
+   private fun resetTimerState(peeTimes: PeeTimes) {
+      currentPeeTimes = peeTimes
+
+      _status.value = PeeTimerStatus.WaitingForStart(peeTimes.movieName, peeTimes.timerCue)
    }
 }
 
 sealed interface PeeTimerStatus {
    object Loading : PeeTimerStatus
    object NoData : PeeTimerStatus
-   data class WaitingForStart(val movieName: String) : PeeTimerStatus
+   data class WaitingForStart(val movieName: String, val timerCue: String) : PeeTimerStatus
 }

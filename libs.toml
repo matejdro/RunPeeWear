@@ -7,6 +7,7 @@ androidx-compose-wear = "1.0.0-alpha10"
 androidx-lifecycle = "2.4.1"
 androidx-wear = "1.2.0"
 dagger = "2.38.1"
+horologist-layout = "0.0.25"
 libsu = "5.0.2"
 logcat = "0.1"
 kotlin = "1.5.31"
@@ -30,6 +31,7 @@ androidx-wear = { module = "androidx.wear:wear", version.ref = "androidx.wear" }
 dagger-hilt-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "dagger" }
 dagger-hilt-runtime = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
+horologist-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist.layout" }
 libsu = { module = "com.github.topjohnwu.libsu:core", version.ref = "libsu" }
 libsu-io = { module = "com.github.topjohnwu.libsu:io", version.ref = "libsu" }
 logcat = { module = "com.squareup.logcat:logcat", version.ref = "logcat" }

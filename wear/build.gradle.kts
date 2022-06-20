@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-   compileSdk = 31
+   compileSdk = 32
 
    defaultConfig {
       applicationId = "com.matejdro.runpeewear"
       minSdk = 26
-      targetSdk = 31
+      targetSdk = 32
 
       versionCode = 1
       versionName = "1.0"
@@ -42,6 +42,7 @@ dependencies {
    implementation(libs.androidx.activity.compose)
    implementation(libs.androidx.compose.compiler)
    implementation(libs.androidx.compose.wear.foundation)
+   implementation(libs.horologist.layout)
    implementation(libs.androidx.wear)
    implementation(libs.androidx.compose.wear.material)
    implementation(libs.androidx.compose.wear.navigation)
