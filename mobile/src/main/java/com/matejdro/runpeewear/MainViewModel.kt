@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.matejdro.runpeewear.data.MovieDatabase
 import com.matejdro.runpeewear.model.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,9 +17,18 @@ class MainViewModel @Inject constructor(private val movieDatabase: MovieDatabase
    val movies: StateFlow<List<Movie>>
       get() = _movies
 
+   private var loadingJob: Job? = null
+
    init {
-      viewModelScope.launch {
+      loadingJob = viewModelScope.launch {
          _movies.value = movieDatabase.loadMovies()
+      }
+   }
+
+   fun search(keyword: String) {
+      loadingJob?.cancel()
+      loadingJob = viewModelScope.launch {
+         _movies.value = movieDatabase.loadMovies(keyword)
       }
    }
 }

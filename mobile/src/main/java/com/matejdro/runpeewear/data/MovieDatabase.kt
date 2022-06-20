@@ -14,14 +14,20 @@ import javax.inject.Singleton
 @OptIn(ExperimentalStdlibApi::class)
 @Singleton
 class MovieDatabase @Inject constructor(@ApplicationContext context: Context) : RootDatabase(context) {
-   suspend fun loadMovies(): List<Movie> = withContext(Dispatchers.IO) {
+   suspend fun loadMovies(filter: String? = null): List<Movie> = withContext(Dispatchers.IO) {
       ensureDatabaseIsLoaded()
+
+      val selection = filter
+         ?.split(' ')
+         ?.joinToString(separator = " AND ") {
+            "title LIKE '%$it%'"
+         }
 
       buildList {
          database.query(
             /* table = */ "movies",
             /* columns = */ arrayOf("mKey", "title"),
-            /* selection = */ null,
+            /* selection = */ selection,
             /* selectionArgs = */ null,
             /* groupBy = */ null,
             /* having = */ null,
