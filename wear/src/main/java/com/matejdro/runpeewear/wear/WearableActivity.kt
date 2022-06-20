@@ -3,7 +3,6 @@
 package com.matejdro.runpeewear.wear
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.focusable
@@ -17,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -29,23 +29,41 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
+import androidx.wear.ambient.AmbientModeSupport
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Text
 import com.google.android.horologist.compose.layout.fillMaxRectangle
 import com.matejdro.runpeewear.wear.theme.WearAppTheme
+import com.matejdro.runpeewear.wear.util.ambient.AmbientCallbackController
+import com.matejdro.runpeewear.wear.util.ambient.AmbientScreen
+import com.matejdro.runpeewear.wear.util.ambient.AmbientState
+import com.matejdro.runpeewear.wear.util.ambient.LocalAmbientCallbackController
 import com.matejdro.runpeewear.wear.util.roundVerticalPadding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import logcat.logcat
+import java.time.Instant
 
 @AndroidEntryPoint
-class WearableActivity : ComponentActivity() {
-   val viewModel: WearableViewModel by viewModels()
+class WearableActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvider {
+   private val viewModel: WearableViewModel by viewModels()
+   private val ambientCallbackController = AmbientCallbackController()
+
+   override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback {
+      return ambientCallbackController
+   }
+
    override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
 
+      AmbientModeSupport.attach(this)
+
       setContent {
          WearAppTheme {
-            RootContent()
+            CompositionLocalProvider(LocalAmbientCallbackController provides ambientCallbackController) {
+               RootContent()
+            }
          }
       }
    }
@@ -62,6 +80,10 @@ class WearableActivity : ComponentActivity() {
          is PeeTimerStatus.WaitingForStart -> {
             WaitingForStart(state)
          }
+         is PeeTimerStatus.WaitingForNextPeetime -> {
+            WaitingForNextPeetime(state)
+         }
+         is PeeTimerStatus.InPeetime -> TODO()
       }
    }
 
@@ -113,6 +135,17 @@ class WearableActivity : ComponentActivity() {
 
       LaunchedEffect(Unit) {
          focusRequester.requestFocus()
+      }
+   }
+
+   @Composable
+   private fun WaitingForNextPeetime(state: PeeTimerStatus.WaitingForNextPeetime) {
+      AmbientScreen(
+         Modifier.fillMaxRectangle(),
+         updateCallback = { logcat { "Ambient update $it" } }) { modifier: Modifier, ambientState: AmbientState, _: Instant ->
+         Box(modifier, contentAlignment = Alignment.Center) {
+            Text("Ambient: $ambientState")
+         }
       }
    }
 }

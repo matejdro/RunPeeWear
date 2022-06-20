@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import logcat.logcat
+import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,10 +44,24 @@ class WearableViewModel @Inject constructor(
       logcat { "Starting timer for ${peeTimes.movieName}" }
    }
 
+   fun tick() {
+
+   }
+
    private fun resetTimerState(peeTimes: PeeTimes) {
       currentPeeTimes = peeTimes
 
-      _status.value = PeeTimerStatus.WaitingForStart(peeTimes.movieName, peeTimes.timerCue)
+//      _status.value = PeeTimerStatus.WaitingForStart(peeTimes.movieName, peeTimes.timerCue)
+
+      val time = peeTimes.times.first()
+      val next = peeTimes.times.elementAt(1)
+      _status.value = PeeTimerStatus.WaitingForNextPeetime(
+         Instant.now().plusSeconds(100),
+         time.isRecommended,
+         Instant.now().plusSeconds(200),
+         next.isRecommended,
+         time.synopsis
+      )
    }
 }
 
@@ -54,4 +69,19 @@ sealed interface PeeTimerStatus {
    object Loading : PeeTimerStatus
    object NoData : PeeTimerStatus
    data class WaitingForStart(val movieName: String, val timerCue: String) : PeeTimerStatus
+   data class WaitingForNextPeetime(
+      val nextPeetime: Instant,
+      val isRecommended: Boolean,
+      val nextNextPeetime: Instant?,
+      val isNextNextRecommended: Boolean?,
+      val lastSynopsis: String
+   ) : PeeTimerStatus
+
+   data class InPeetime(
+      val isRecommended: Boolean,
+      val nextNextPeetime: Instant?,
+      val isNextNextRecommended: Boolean?,
+      val peetimeCue: String,
+      val peetimeSynopsis: String
+   ) : PeeTimerStatus
 }
