@@ -75,6 +75,12 @@ class WearableActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackP
       }
    }
 
+   override fun onStart() {
+      super.onStart()
+
+      viewModel.tick()
+   }
+
    @Composable
    private fun RootContent() {
       when (val state = viewModel.status.collectAsState().value) {
@@ -191,7 +197,7 @@ class WearableActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackP
                   horizontalAlignment = Alignment.CenterHorizontally
                ) {
                   Text(
-                     "U: NOW, R: ${state.isRecommended.yesOrNoString()}",
+                     "NOW, R: ${state.isRecommended.yesOrNoString()}",
                      style = darkTextStyle(),
                      fontSize = 18.sp
                   )
