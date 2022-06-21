@@ -1,8 +1,10 @@
 package com.matejdro.runpeewear.wear.theme
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.style.TextAlign
 import androidx.wear.compose.material.Colors
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.Typography
 import com.matejdro.runpeewear.common.AppColors
 
 
@@ -10,9 +12,14 @@ import com.matejdro.runpeewear.common.AppColors
 fun WearAppTheme(
    content: @Composable () -> Unit
 ) {
+   val defaultTextStyle = Typography().body1.copy(
+      textAlign = TextAlign.Center
+   )
+
    MaterialTheme(
       colors = colorPalette,
-      content = content
+      content = content,
+      typography = Typography().copy(body1 = defaultTextStyle)
    )
 }
 
