@@ -24,3 +24,35 @@ fun Modifier.roundVerticalPadding(): Modifier = composed() {
    }
    padding(top = inset, bottom = inset * 2)
 }
+
+/**
+ * Add extra horizontal padding to account for the watch's roundness
+ */
+@Stable
+fun Modifier.roundHorizontalPadding(): Modifier = composed() {
+   val isRound = LocalConfiguration.current.isScreenRound
+   var inset: Dp = 0.dp
+   if (isRound) {
+      val screenHeightDp = LocalConfiguration.current.screenHeightDp
+      val screenWidthDp = LocalConfiguration.current.smallestScreenWidthDp
+      val maxSquareEdge = (sqrt(((screenHeightDp * screenWidthDp) / 2).toDouble()))
+      inset = Dp(((screenHeightDp - maxSquareEdge) / 2).toFloat())
+   }
+   padding(horizontal = inset)
+}
+
+/**
+ * Add extra vertical padding to the top to account for the watch's roundness
+ */
+@Stable
+fun Modifier.roundTopPadding(): Modifier = composed() {
+   val isRound = LocalConfiguration.current.isScreenRound
+   var inset: Dp = 0.dp
+   if (isRound) {
+      val screenHeightDp = LocalConfiguration.current.screenHeightDp
+      val screenWidthDp = LocalConfiguration.current.smallestScreenWidthDp
+      val maxSquareEdge = (sqrt(((screenHeightDp * screenWidthDp) / 2).toDouble()))
+      inset = Dp(((screenHeightDp - maxSquareEdge) / 2).toFloat())
+   }
+   padding(top = inset)
+}

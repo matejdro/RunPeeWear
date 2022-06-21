@@ -90,7 +90,9 @@ class WearableActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackP
          is PeeTimerStatus.WaitingForNextPeetime -> {
             WaitingForNextPeetime(state)
          }
-         is PeeTimerStatus.InPeetime -> TODO()
+         is PeeTimerStatus.InPeetime -> {
+            InPeetime(state)
+         }
       }
    }
 
@@ -166,6 +168,75 @@ class WearableActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackP
                      Text("Last peetime synopsis:")
                      Text(it)
                   }
+
+                  TimerCancelFooter(state.movieName)
+               }
+            }
+         )
+      }
+   }
+
+   @Composable
+   private fun InPeetime(state: PeeTimerStatus.InPeetime) {
+      AmbientScreen(
+         Modifier
+            .padding(top = 8.dp, start = 8.dp, end = 8.dp),
+         updateCallback = { viewModel.tick() }) { modifier: Modifier, ambientState: AmbientState, _: Instant ->
+         AmbientOrInteractive(
+            ambientState,
+            ambient = {
+               Column(
+                  modifier,
+                  verticalArrangement = Arrangement.Center,
+                  horizontalAlignment = Alignment.CenterHorizontally
+               ) {
+                  Text(
+                     "U: NOW, R: ${state.isRecommended.yesOrNoString()}",
+                     style = darkTextStyle(),
+                     fontSize = 18.sp
+                  )
+                  Text(
+                     state.peetimeCue,
+                     style = darkTextStyle(),
+                     fontSize = 18.sp
+                  )
+
+                  state.minutesToNextRecommendedPeetime?.let {
+                     Text(
+                        "NR: ${formatMinutes(it)}", style = darkTextStyle(),
+                        fontSize = 18.sp
+                     )
+                  }
+
+                  state.minutesToNextPeetime?.let {
+                     Text(
+                        "N: ${formatMinutes(it)}", style = darkTextStyle(),
+                        fontSize = 18.sp
+                     )
+                  }
+               }
+            },
+            interactive = {
+               FullScreenScrollable {
+                  val recommendedText = if (state.isRecommended) "and it's recommended" else "but it's not recommended"
+                  Text(
+                     "Pee time NOW, $recommendedText. Cue:"
+                  )
+
+                  Text(state.peetimeCue)
+
+                  state.minutesToNextPeetime?.let {
+                     Text("Next pee time in ${formatMinutes(it)}")
+                  }
+
+                  state.minutesToNextRecommendedPeetime?.let {
+                     Text("Next recommended pee time in ${formatMinutes(it)}")
+                  }
+
+                  Spacer(Modifier.height(LocalConfiguration.current.screenHeightDp.dp))
+
+                  Text("Peetime synopsis:")
+                  Text(state.peetimeSynopsis)
 
                   TimerCancelFooter(state.movieName)
                }

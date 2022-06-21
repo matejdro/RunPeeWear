@@ -57,7 +57,7 @@ class WearableViewModel @Inject constructor(
 
 //      _status.value = PeeTimerStatus.WaitingForStart(peeTimes.movieName, peeTimes.timerCue)
 
-      val time = peeTimes.times.first()
+      val time = peeTimes.times.elementAt(3)
       val next = peeTimes.times.elementAt(1)
       val now = Instant.now()
       _status.value = PeeTimerStatus.WaitingForNextPeetime(
@@ -65,6 +65,14 @@ class WearableViewModel @Inject constructor(
          false,
          150,
          250,
+         time.synopsis,
+         peeTimes.movieName
+      )
+      _status.value = PeeTimerStatus.InPeetime(
+         true,
+         30,
+         30,
+         time.cue,
          time.synopsis,
          peeTimes.movieName
       )
@@ -86,9 +94,10 @@ sealed interface PeeTimerStatus {
 
    data class InPeetime(
       val isRecommended: Boolean,
-      val nextNextPeetime: Instant?,
-      val isNextNextRecommended: Boolean?,
+      val minutesToNextPeetime: Int?,
+      val minutesToNextRecommendedPeetime: Int?,
       val peetimeCue: String,
-      val peetimeSynopsis: String
+      val peetimeSynopsis: String,
+      val movieName: String
    ) : PeeTimerStatus
 }
