@@ -20,7 +20,7 @@ class PeetimesDatabase @Inject constructor(@ApplicationContext context: Context)
       buildList {
          database.query(
             /* table = */ "peetimes",
-            /* columns = */ arrayOf("time", "timeSec", "recommended", "cue", "synopsis"),
+            /* columns = */ arrayOf("time", "timeSec", "recommended", "cue", "synopsis", "lenSec"),
             /* selection = */ "mKey = ? AND time > 1 AND isMeta = 0",
             /* selectionArgs = */ arrayOf(movieId.toString()),
             /* groupBy = */ null,
@@ -33,14 +33,18 @@ class PeetimesDatabase @Inject constructor(@ApplicationContext context: Context)
                val recommended = cursor.getInt(2)
                val cue = cursor.getString(3)
                val synopsis = cursor.getString(4)
+               val lengthSeconds = cursor.getInt(5)
 
                var totalTimeSeconds = timeMinutes * 60 + timeSeconds
 
                val isCreditsCue = recommended > 1
-               if (!isCreditsCue) {
-                  // Alert 10 seconds before actual cue
-                  totalTimeSeconds -= 10
+               if (isCreditsCue) {
+                  // For some reason, cue for credits is at the end of the movie. Subtract credits length from the actual cue time
+                  totalTimeSeconds -= lengthSeconds
                }
+
+               // Alert 10 seconds before actual cue
+               totalTimeSeconds -= 10
 
                add(
                   PeeTime(totalTimeSeconds, cue, synopsis, recommended > 0)
