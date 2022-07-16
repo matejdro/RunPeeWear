@@ -38,8 +38,8 @@ class PeetimesDatabase @Inject constructor(@ApplicationContext context: Context)
 
                val isCreditsCue = recommended > 1
                if (!isCreditsCue) {
-                  // Alert 30 seconds before actual cue
-                  totalTimeSeconds -= 30
+                  // Alert 10 seconds before actual cue
+                  totalTimeSeconds -= 10
                }
 
                add(
