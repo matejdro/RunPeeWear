@@ -46,11 +46,12 @@ class WearableViewModel @Inject constructor(
 
       viewModelScope.launch {
          dataClient.getDataItemFlow(Uri.parse("wear://*${CommPaths.DATA_PEE_TIMES}")).collect {
-            if (it == null) {
+            val data = it?.data
+            if (data == null) {
                _status.value = PeeTimerStatus.NoData
                return@collect
             }
-            val peeTimes = PeeTimes.ADAPTER.decode(it.data)
+            val peeTimes = PeeTimes.ADAPTER.decode(data)
             resetTimerState(peeTimes)
          }
       }

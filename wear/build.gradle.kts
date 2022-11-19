@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-   compileSdk = 32
+   compileSdk = 33
 
    defaultConfig {
       applicationId = "com.matejdro.runpeewear"
@@ -28,7 +28,7 @@ android {
    }
 
    composeOptions {
-      kotlinCompilerExtensionVersion = libs.versions.androidx.compose.asProvider().get()
+      kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
    }
 
    kotlinOptions {
