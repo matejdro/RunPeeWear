@@ -9,6 +9,8 @@ plugins {
 android {
    compileSdk = 33
 
+   namespace = "com.matejdro.runpeewear"
+
    defaultConfig {
       applicationId = "com.matejdro.runpeewear"
       minSdk = 26
@@ -23,19 +25,18 @@ android {
    }
 
    compileOptions {
-      sourceCompatibility(JavaVersion.VERSION_1_8)
-      targetCompatibility(JavaVersion.VERSION_1_8)
+      sourceCompatibility(JavaVersion.VERSION_11)
+      targetCompatibility(JavaVersion.VERSION_11)
    }
 
    composeOptions {
       kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
    }
-
-   kotlinOptions {
-      jvmTarget = "1.8"
-   }
 }
 
+kotlin {
+   jvmToolchain(11)
+}
 
 dependencies {
    implementation(project(":common"))

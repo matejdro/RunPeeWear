@@ -12,7 +12,7 @@ class MobileApplication : Application() {
 
       AndroidLogcatLogger.installOnDebuggableApp(this)
 
-      Shell.enableVerboseLogging = BuildConfig.DEBUG;
+      Shell.enableVerboseLogging = true
       Shell.setDefaultBuilder(
          Shell.Builder.create()
             .setFlags(Shell.FLAG_REDIRECT_STDERR or Shell.FLAG_MOUNT_MASTER)
