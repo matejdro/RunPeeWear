@@ -224,9 +224,13 @@ class WearableActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackP
             },
             interactive = {
                FullScreenScrollable {
-                  val recommendedText = if (state.isRecommended) "and it's recommended" else "but it's not recommended"
+                  val recommendedText = when {
+                      state.peetimeMeta.isNotBlank() -> state.peetimeMeta.trim()
+                      state.isRecommended -> "and it's recommended"
+                      else -> "but it's not recommended"
+                  }
                   Text(
-                     "Pee time NOW, $recommendedText. Cue:"
+                     "Pee time NOW, $recommendedText"
                   )
 
                   Text(state.peetimeCue)

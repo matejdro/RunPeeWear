@@ -13,4 +13,5 @@ message PeeTime {
   string cue = 2;
   string synopsis = 3;
   bool isRecommended = 4;
+  string meta = 5;
 }

@@ -94,6 +94,7 @@ class WearableViewModel @Inject constructor(
             activePeetime.isRecommended,
             nextPeetime?.cueTimeSecondsAfterMovieStart?.minus(secondsSinceStart)?.div(60),
             nextRecommendedPeetime?.cueTimeSecondsAfterMovieStart?.minus(secondsSinceStart)?.div(60),
+            activePeetime.meta,
             activePeetime.cue,
             activePeetime.synopsis,
             peeTimes.movieName
@@ -155,6 +156,7 @@ sealed interface PeeTimerStatus {
       val isRecommended: Boolean,
       val minutesToNextPeetime: Int?,
       val minutesToNextRecommendedPeetime: Int?,
+      val peetimeMeta: String,
       val peetimeCue: String,
       val peetimeSynopsis: String,
       val movieName: String
