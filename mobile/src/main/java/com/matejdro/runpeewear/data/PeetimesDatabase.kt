@@ -37,7 +37,7 @@ class PeetimesDatabase @Inject constructor(@ApplicationContext context: Context)
 
                var totalTimeSeconds = timeMinutes * 60 + timeSeconds
 
-               val isCreditsCue = recommended > 1
+               val isCreditsCue = timeSeconds == 0 && cue.contains("end credits")
                if (isCreditsCue) {
                   // For some reason, cue for credits is at the end of the movie. Subtract credits length from the actual cue time
                   totalTimeSeconds -= lengthSeconds
@@ -47,7 +47,7 @@ class PeetimesDatabase @Inject constructor(@ApplicationContext context: Context)
                totalTimeSeconds -= 10
 
                add(
-                  PeeTime(totalTimeSeconds, cue, synopsis, recommended > 0)
+                  PeeTime(totalTimeSeconds, cue, synopsis, recommended == 1)
                )
             }
          }
