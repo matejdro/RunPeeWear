@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -37,40 +36,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentActivity
-import androidx.wear.ambient.AmbientModeSupport
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.LocalTextStyle
 import androidx.wear.compose.material.Text
 import com.google.android.horologist.compose.layout.fillMaxRectangle
 import com.matejdro.runpeewear.wear.theme.WearAppTheme
-import com.matejdro.runpeewear.wear.util.ambient.AmbientCallbackController
 import com.matejdro.runpeewear.wear.util.ambient.AmbientScreen
 import com.matejdro.runpeewear.wear.util.ambient.AmbientState
-import com.matejdro.runpeewear.wear.util.ambient.LocalAmbientCallbackController
 import com.matejdro.runpeewear.wear.util.roundVerticalPadding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.Instant
 
 @AndroidEntryPoint
-class WearableActivity : FragmentActivity(), AmbientModeSupport.AmbientCallbackProvider {
+class WearableActivity : FragmentActivity() {
    private val viewModel: WearableViewModel by viewModels()
-   private val ambientCallbackController = AmbientCallbackController()
-
-   override fun getAmbientCallback(): AmbientModeSupport.AmbientCallback {
-      return ambientCallbackController
-   }
 
    override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
 
-      AmbientModeSupport.attach(this)
-
       setContent {
          WearAppTheme {
-            CompositionLocalProvider(LocalAmbientCallbackController provides ambientCallbackController) {
-               RootContent()
-            }
+            RootContent()
          }
       }
    }

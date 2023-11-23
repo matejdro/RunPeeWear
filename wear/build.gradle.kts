@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-   compileSdk = 33
+   compileSdk = 34
 
    namespace = "com.matejdro.runpeewear"
 
@@ -49,6 +49,7 @@ dependencies {
    implementation(libs.androidx.compose.wear.material)
    implementation(libs.androidx.compose.wear.navigation)
    implementation(libs.dagger.hilt.runtime)
+   implementation(libs.kotlinova.core)
    implementation(libs.kotlin.coroutines.playServices)
    implementation(libs.logcat)
    implementation(libs.playServices.wearable)

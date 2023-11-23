@@ -5,13 +5,12 @@ plugins {
 }
 
 android {
-   compileSdk = 33
+   compileSdk = 34
 
    namespace = "com.matejdro.runpeewear.common"
 
    defaultConfig {
       minSdk = 26
-      targetSdk = 31
    }
 
    compileOptions {

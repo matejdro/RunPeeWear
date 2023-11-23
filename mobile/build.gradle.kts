@@ -19,7 +19,7 @@ configure<si.inova.kotlinova.gradle.versionbump.TomlVersionBumpExtension> {
 }
 
 android {
-   compileSdk = 33
+   compileSdk = 34
 
    namespace = "com.matejdro.runpeewear"
 
