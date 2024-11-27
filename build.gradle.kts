@@ -9,6 +9,7 @@ buildscript {
    dependencies {
       classpath(libs.androidPluginGradle)
       classpath(libs.kotlin.pluginGradle)
+      classpath(libs.kotlin.plugin.compose)
       classpath(libs.wire.pluginGradle)
       classpath(libs.dagger.hilt.plugin)
       classpath(libs.versionsPlugin)

@@ -4,6 +4,7 @@ plugins {
     id("kotlinova")
     kotlin("android")
     kotlin("kapt")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 kotlinova {
@@ -43,10 +44,6 @@ android {
 
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
 }
 

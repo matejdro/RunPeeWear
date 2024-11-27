@@ -4,6 +4,7 @@ plugins {
    kotlin("android")
    kotlin("kapt")
    id("kotlin-parcelize")
+   id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -30,10 +31,6 @@ android {
 
       isCoreLibraryDesugaringEnabled = true
    }
-
-   composeOptions {
-      kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
-   }
 }
 
 kotlin {
@@ -46,7 +43,6 @@ dependencies {
    coreLibraryDesugaring(libs.desugarJdkLib)
 
    implementation(libs.androidx.activity.compose)
-   implementation(libs.androidx.compose.compiler)
    implementation(libs.androidx.compose.wear.foundation)
    implementation(libs.horologist.layout)
    implementation(libs.androidx.wear)

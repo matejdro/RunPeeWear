@@ -31,3 +31,4 @@ mobile/google-services.json
 
 # Ignore build protobuf files
 /common/src/main/java/com/matejdro/wearmusiccenter/proto
+/.kotlin
